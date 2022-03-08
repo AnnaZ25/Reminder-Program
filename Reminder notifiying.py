@@ -28,9 +28,12 @@ def find_date():
         day = raw_time   
 
     # joining the date together
-    day = day + "/" + month + "/" + raw_time[4]
+    date = day + "/" + month + "/" + raw_time[4]
 
     return date
 
+#main program
 date = find_date()
 
+
+#notify(title, message)
