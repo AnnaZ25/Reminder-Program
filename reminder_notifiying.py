@@ -43,19 +43,38 @@ def find_date():
     return date
 
 #main program
+
 date = find_date()
 
-#opening the reminders file and searching for the number of reminders to display today
+#opening the reminders file in read mode
 file = open("reminders.txt", "r")
-count = []
 
+#adding all the lines in the file to a list
+lines = []
 for line in file:
     sections = line.split(", ")
-    if sections[0] == date:
-        count.append(sections)
-
+    lines.append(sections)
 file.close()
 
-if len(count) == 1:
-    notify(count[0][1], count[0] [2])
+#finding all the items to be removed in the list by comparing the date for each element with the current date
+remove = []
+for element in range(0, len(lines)):
+    if lines[element][0] == date:
+        #sending the desktop notification(s)
+        notify(lines[element][1], lines[element][2])
+        #appending the index numbers to be removed
+        remove.append(element)
+        #adding a delay of 10 seconds so that there is a delay between each notification
+        time.sleep(10)
 
+#removing the items that needed to be removed from the list
+counter = 0
+for i in range (0, len(remove)):
+    lines.pop(remove[i]-counter)
+    counter += 1
+
+#opening the reminders file in write mode and writing the information in the list to the file
+file = open("reminders.txt", "w")
+for line in lines:
+    file.write(", ".join(line))
+file.close()
