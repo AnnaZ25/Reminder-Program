@@ -1,5 +1,15 @@
 #importing needed modules
 import time
+from plyer import notification as n
+
+#procedure that sends a desktop notification
+def notify(ptitle, pmessage):
+    n.notify(
+        title = ptitle,
+        message = pmessage,
+        app_icon = None,
+        timeout = 15,
+        )
 
 #function that finds the current date and time
 def find_date():
@@ -35,5 +45,17 @@ def find_date():
 #main program
 date = find_date()
 
+#opening the reminders file and searching for the number of reminders to display today
+file = open("reminders.txt", "r")
+count = []
 
-#notify(title, message)
+for line in file:
+    sections = line.split(", ")
+    if sections[0] == date:
+        count.append(sections)
+
+file.close()
+
+if len(count) == 1:
+    notify(count[0][1], count[0] [2])
+
