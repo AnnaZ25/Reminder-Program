@@ -5,7 +5,9 @@ def go_home():
     title.place(relx = 0.5, y = 80, anchor = CENTER)
     create_button.place(relx = 0.5, y = 140, anchor = CENTER)
     reminders_button.place(relx = 0.5, y = 180, anchor = CENTER)
+    button_cover = Canvas(main, bg ="#EFF1F0", height = 50, width = 50, highlightthickness = 0)
     about_button.place(relx = 0.5, y = 220, anchor = CENTER)
+    button_cover.place(relx = 0.15, y = 350, anchor = CENTER)
 
 def leave_page(page_and_home):
     page = page_and_home[0]
@@ -47,6 +49,7 @@ def about_page():
 
 #initialising the window, setting some properties and creating a canvas
 main = Tk()
+main.configure(bg = "#EFF1F0")
 main.geometry("500x400")
 main.title("Reminder Program")
 
@@ -55,8 +58,8 @@ title = Label(main, text = "The Reminders App", font = (40))
 create_button = Button(main, text = "Create a Reminder", command = create_page)
 reminders_button = Button(main, text = "Reminders", command = reminders_page)
 about_button = Button(main, text = "About", command = about_page)
-C = Canvas(main, bg ="blue", height = 50, width = 50)
-C.place(relx = 0.15, y = 350, anchor = CENTER)
+button_cover = Canvas(main, bg ="#EFF1F0", highlightthickness = 0, height = 50, width = 50)
+
 
 #############################remmeber to this below when adding new things######################################################
 home_page = [title, create_button, reminders_button, about_button]
