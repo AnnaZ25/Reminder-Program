@@ -1,0 +1,7 @@
+other things to add:
+-possibility to repeat reminder
+-autorun on log in
+
+other additional things to add:
+-timing of reminder (set a specific time)
+-gui
