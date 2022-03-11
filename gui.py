@@ -55,6 +55,8 @@ title = Label(main, text = "The Reminders App", font = (40))
 create_button = Button(main, text = "Create a Reminder", command = create_page)
 reminders_button = Button(main, text = "Reminders", command = reminders_page)
 about_button = Button(main, text = "About", command = about_page)
+C = Canvas(main, bg ="blue", height = 50, width = 50)
+C.place(relx = 0.15, y = 350, anchor = CENTER)
 
 #############################remmeber to this below when adding new things######################################################
 home_page = [title, create_button, reminders_button, about_button]
