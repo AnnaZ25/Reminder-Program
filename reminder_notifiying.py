@@ -35,7 +35,7 @@ def find_date():
     if len(raw_time[2]) == 1:
         day = "0" + raw_time[2]
     else:
-        day = raw_time   
+        day = raw_time[2]   
 
     # joining the date together
     date = day + "/" + month + "/" + raw_time[4]
