@@ -5,8 +5,8 @@ def go_home():
     title.place(relx = 0.5, y = 80, anchor = CENTER)
     create_button.place(relx = 0.5, y = 140, anchor = CENTER)
     reminders_button.place(relx = 0.5, y = 180, anchor = CENTER)
-    button_cover = Canvas(main, bg ="#EFF1F0", height = 50, width = 50, highlightthickness = 0)
     about_button.place(relx = 0.5, y = 220, anchor = CENTER)
+    button_cover = Canvas(main, bg ="#EFF1F0", height = 50, width = 50, highlightthickness = 0)
     button_cover.place(relx = 0.15, y = 350, anchor = CENTER)
 
 def leave_page(page_and_home):
@@ -25,9 +25,33 @@ def create_page():
     leave_page(page_and_home)
     title = Label(main, text="Create a Reminder", font=(40))
     title.place(relx = 0.5, y = 80, anchor = CENTER)
-    page = [title]
+
+    date = Label(main, text="Date: ")
+    title_message = Label(main, text= "Title: ")
+    message = Label(main, text="Message: ")
+    date_box = Entry(main)
+    title_message_box = Entry(main, width = 40)
+    message_box = Text(main, width = 30, height = 5)
+
+    date.place(relx = 0.3, y = 140, anchor = CENTER)
+    title_message.place(relx = 0.3, y = 180, anchor = CENTER)
+    message.place(relx = 0.3, y = 220, anchor = CENTER)   
+    date_box.place(relx = 0.60, y = 140, anchor = E)
+    title_message_box.place(relx = 0.6, y = 180, anchor = CENTER)
+    message_box.place(relx = 0.6, y = 210, anchor = N)
+
+    reminder = [date_box, title_message_box, message_box]
+    save = Button(main, text = "Save", command = lambda: save_reminder(reminder))
+    save.place(relx = 0.6, y = 350, anchor = CENTER)
+
+    page = [title, date_box, title_message_box, message_box, date, title_message, message, save]
     page_and_home = [page, True]
     back_button(page_and_home)
+    
+def save_reminder(reminder):
+    for i in range (0, len(reminder)-1):
+        print(reminder[i].get())
+    print(reminder[2].get(1.0, "end-1c"))
 
 def reminders_page():
     page_and_home = [home_page, False]
@@ -69,10 +93,3 @@ go_home()
 #show window
 
 main.mainloop()
-
-'''
-#creating an entry box
-entry_box = Entry(main)
-canvas.create_window(200, 50, window=entry_box)
-
-'''
