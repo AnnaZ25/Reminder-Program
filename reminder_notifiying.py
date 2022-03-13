@@ -38,7 +38,7 @@ def find_date():
         day = raw_time[2]   
 
     # joining the date together
-    date = day + "/" + month + "/" + raw_time[4]
+    date = day + "/" + str(month) + "/" + raw_time[4]
 
     return date
 

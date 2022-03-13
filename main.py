@@ -40,9 +40,9 @@ def create_page():
     title.place(relx = 0.5, y = 80, anchor = CENTER)
 
     #creating the items on the 'Create a Reminder' page
-    date = Label(main, text="Date: ")
-    title_message = Label(main, text= "Title: ")
-    message = Label(main, text="Message: ")
+    date = Label(main, text = "Date: ")
+    title_message = Label(main, text = "Title: ")
+    message = Label(main, text = "Message: ")
     date_box = Entry(main)
     title_message_box = Entry(main, width = 40)
     message_box = Text(main, width = 30, height = 5)
@@ -95,7 +95,7 @@ def reminders_page():
     leave_page(page_and_home)
 
     #creating the items on the 'Reminders' page
-    title = Label(main, text ="Reminders", font = (40))
+    title = Label(main, text = "Reminders", font = (40))
     today_reminders = Button(main, text = "Today's Reminders", command = lambda: today_reminders_page(page))
     all_reminders = Button(main, text = "All Reminders", command = lambda: all_reminders_page(page))
 
@@ -116,17 +116,17 @@ def today_reminders_page(page):
     #calling leave page to leave the home page
     #using the variable 'page_and_home' to pass in the list of home page elements
     #the string determines whether we are returning to a page and if so, which page
-    page_and_home = [home_page, "not returning"]
+    page_and_home = [page, "not returning"]
     leave_page(page_and_home)
 
     #creating the items on the 'Today's Reminders' page
-    title = Label(main, text ="Today's Reminders", font = (40))
+    title = Label(main, text = "Today's Reminders", font = (40))
 
     #positioning the items on the 'Today's Reminders' page
     title.place(relx = 0.5, y = 80, anchor = CENTER)
 
     #list containing all of the items on the about page
-    page= [title]
+    page = [title]
 
     #setting 'page_and_home' to the list of items and setting the string to "reminders" (as we want the button that will be created to leave this page and bring us back to the 'Reminders' page)
     #passing this into 'back_button' which creates and positions the button
@@ -141,7 +141,7 @@ def all_reminders_page(page):
     leave_page(page_and_home)
 
     #creating the items on the 'All Reminders' page
-    title = Label(main, text ="All Reminders", font = (40))
+    title = Label(main, text = "All Reminders", font = (40))
 
     #positioning the items on the 'Today's Reminders' page
     title.place(relx = 0.5, y = 80, anchor = CENTER)
@@ -162,7 +162,7 @@ def about_page():
     leave_page(page_and_home)
 
     #creating the items on the 'About' page
-    title = Label(main, text ="About", font = (40))
+    title = Label(main, text = "About", font = (40))
 
     #positioning the items on the 'About' page
     title.place(relx = 0.5, y = 80, anchor = CENTER)
@@ -186,7 +186,7 @@ title = Label(main, text = "The Reminders App", font = (40))
 create_button = Button(main, text = "Create a Reminder", command = create_page)
 reminders_button = Button(main, text = "Reminders", command = reminders_page)
 about_button = Button(main, text = "About", command = about_page)
-button_cover = Canvas(main, bg ="#EFF1F0", highlightthickness = 0, height = 50, width = 50)
+button_cover = Canvas(main, bg = "#EFF1F0", highlightthickness = 0, height = 50, width = 50)
 
 #list containing all the items on the home page
 home_page = [title, create_button, reminders_button, about_button]
