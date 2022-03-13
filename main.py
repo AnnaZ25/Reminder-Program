@@ -19,9 +19,11 @@ def leave_page(page_and_home):
     #runs a loop to remove the position of each page element
     for i in range(0, len(page)):
         page[i].place_forget()
-    #checks whether we are returning to the home page. If yes, then runs the code for positioning the home page elements
-    if page_and_home[1] == True:
+    #checks whether we are returning to the home page or the reminders page. Then runs the code for positioning the items on the page we are returning to
+    if page_and_home[1] == "home":
         go_home()
+    elif page_and_home[1] == "reminders":
+        reminders_page()
       
 def back_button(page_and_home):
     #creates the 'back' button
@@ -31,10 +33,10 @@ def back_button(page_and_home):
 def create_page():
     #calling leave page to leave the home page
     #using the variable 'page_and_home' to pass in the list of home page elements
-    #the boolean determines whether the page we are moving to is a home page
-    page_and_home = [home_page, False]
+    #the string determines whether we are returning to a page and if so, which page
+    page_and_home = [home_page, "not returning"]
     leave_page(page_and_home)
-    title = Label(main, text="Create a Reminder", font=(40))
+    title = Label(main, text = "Create a Reminder", font = (40))
     title.place(relx = 0.5, y = 80, anchor = CENTER)
 
     #creating the items on the 'Create a Reminder' page
@@ -61,9 +63,9 @@ def create_page():
     #list containing all of the items on the about page
     page = [title, date_box, title_message_box, message_box, date, title_message, message, save]
 
-    #setting 'page_and_home' to the list of items and setting the boolean value to True (as we want the button that will be created toleave this page and bring us back to the home page)
+    #setting 'page_and_home' to the list of items and setting the string to "home" (as we want the button that will be created to leave this page and bring us back to the home page)
     #passing this into 'back_button' which creates and positions the button
-    page_and_home = [page, True]
+    page_and_home = [page, "home"]
     back_button(page_and_home)
     
 def save_reminder(reminder):
@@ -88,29 +90,75 @@ def save_reminder(reminder):
 def reminders_page():
     #calling leave page to leave the home page
     #using the variable 'page_and_home' to pass in the list of home page elements
-    #the boolean determines whether the page we are moving to is a home page
-    page_and_home = [home_page, False]
+    #the string determines whether we are returning to a page and if so, which page
+    page_and_home = [home_page, "not returning"]
     leave_page(page_and_home)
 
     #creating the items on the 'Reminders' page
     title = Label(main, text ="Reminders", font = (40))
+    today_reminders = Button(main, text = "Today's Reminders", command = lambda: today_reminders_page(page))
+    all_reminders = Button(main, text = "All Reminders", command = lambda: all_reminders_page(page))
 
     #positioning the items on the 'Reminders' page
+    title.place(relx = 0.5, y = 80, anchor = CENTER)
+    today_reminders.place(relx = 0.5, y = 140, anchor = CENTER)
+    all_reminders.place(relx = 0.5, y = 180, anchor = CENTER)
+    
+    #list containing all of the items on the about page
+    page = [title, today_reminders, all_reminders]
+
+    #setting 'page_and_home' to the list of items and setting the string to "home" (as we want the button that will be created to leave this page and bring us back to the home page)
+    #passing this into 'back_button' which creates and positions the button
+    page_and_home = [page, "home"]
+    back_button(page_and_home)
+
+def today_reminders_page(page):
+    #calling leave page to leave the home page
+    #using the variable 'page_and_home' to pass in the list of home page elements
+    #the string determines whether we are returning to a page and if so, which page
+    page_and_home = [home_page, "not returning"]
+    leave_page(page_and_home)
+
+    #creating the items on the 'Today's Reminders' page
+    title = Label(main, text ="Today's Reminders", font = (40))
+
+    #positioning the items on the 'Today's Reminders' page
+    title.place(relx = 0.5, y = 80, anchor = CENTER)
+
+    #list containing all of the items on the about page
+    page= [title]
+
+    #setting 'page_and_home' to the list of items and setting the string to "reminders" (as we want the button that will be created to leave this page and bring us back to the 'Reminders' page)
+    #passing this into 'back_button' which creates and positions the button
+    page_and_home = [page, "reminders"]
+    back_button(page_and_home)
+
+def all_reminders_page(page):
+   #calling leave page to leave the home page
+    #using the variable 'page_and_home' to pass in the list of home page elements
+    #the boolean determines whether the page we are moving to is a home page
+    page_and_home = [page, False]
+    leave_page(page_and_home)
+
+    #creating the items on the 'All Reminders' page
+    title = Label(main, text ="All Reminders", font = (40))
+
+    #positioning the items on the 'Today's Reminders' page
     title.place(relx = 0.5, y = 80, anchor = CENTER)
 
     #list containing all of the items on the about page
     page = [title]
 
-    #setting 'page_and_home' to the list of items and setting the boolean value to True (as we want the button that will be created toleave this page and bring us back to the home page)
+    #setting 'page_and_home' to the list of items and setting the string to "reminders" (as we want the button that will be created to leave this page and bring us back to the 'Reminders' page)
     #passing this into 'back_button' which creates and positions the button
-    page_and_home = [page, True]
+    page_and_home = [page, "reminders"]
     back_button(page_and_home)
 
 def about_page():
     #calling leave page to leave the home page
     #using the variable 'page_and_home' to pass in the list of home page elements
-    #the boolean determines whether the page we are moving to is a home page
-    page_and_home = [home_page, False]
+    #the string determines whether we are returning to a page and if so, which page
+    page_and_home = [home_page, "not returning"]
     leave_page(page_and_home)
 
     #creating the items on the 'About' page
@@ -122,9 +170,9 @@ def about_page():
     #list containing all of the items on the about page
     page = [title]
 
-    #setting 'page_and_home' to the list of items and setting the boolean value to True (as we want the button that will be created toleave this page and bring us back to the home page)
+    #setting 'page_and_home' to the list of items and setting the string to "home" (as we want the button that will be created to leave this page and bring us back to the home page)
     #passing this into 'back_button' which creates and positions the button
-    page_and_home = [page, True]
+    page_and_home = [page, "home"]
     back_button(page_and_home)
 
 #initialising the window, setting some properties and creating a canvas
