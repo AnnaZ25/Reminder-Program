@@ -7,7 +7,6 @@ from os.path import exists
 
 def write_file():
     counter = 0 
-    
     file = open("Today_Reminders.txt", "w")
     for i in range (0, len(remove)):
         file.write(", ".join(lines.pop(remove[i]-counter)))
@@ -31,7 +30,6 @@ for element in range(0, len(lines)):
         time.sleep(10)
 
 #removing the items that needed to be removed from the list
-
 if exists("C:\\Users\\dorot\\Documents\\GitHub\\Reminder\\Today_Reminders.txt") == True:
     lines_in = read_file("Today_Reminders.txt")
     if lines_in != []:
