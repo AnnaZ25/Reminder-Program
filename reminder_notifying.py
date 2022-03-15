@@ -3,6 +3,16 @@ import time
 from reminder_subroutines import find_date
 from reminder_subroutines import read_file
 from reminder_subroutines import notify
+from os.path import exists
+
+def write_file():
+    counter = 0 
+    
+    file = open("Today_Reminders.txt", "w")
+    for i in range (0, len(remove)):
+        file.write(", ".join(lines.pop(remove[i]-counter)))
+        counter += 1
+    file.close()
 
 #main program
 
@@ -21,12 +31,19 @@ for element in range(0, len(lines)):
         time.sleep(10)
 
 #removing the items that needed to be removed from the list
-counter = 0
-file = open("Today_Reminders.txt", "w")
-for i in range (0, len(remove)):
-    file.write(", ".join(lines.pop(remove[i]-counter)))
-    counter += 1
-file.close()
+
+if exists("C:\\Users\\dorot\\Documents\\GitHub\\Reminder\\Today_Reminders.txt") == True:
+    lines_in = read_file("Today_Reminders.txt")
+    if lines_in != []:
+        if lines_in[0][0] != date:
+            write_file()
+    else:
+        write_file()
+else:
+    write_file()
+
+
+
 
 #opening the reminders file in write mode and writing the information in the list to the file
 file = open("Reminders.txt", "w")

@@ -1,4 +1,5 @@
 #importing the needed module and file
+from lib2to3.pgen2.token import LEFTSHIFT
 from tkinter import *
 from reminder_subroutines import read_file
 
@@ -146,21 +147,28 @@ def today_reminders_page(page):
 
     scroll_bar = Scrollbar(frame)
 
+    delete_button = Button(frame, text = "Delete")
+
     lines = read_file("Today_Reminders.txt")
     list_title = Listbox(frame, height = 5, yscrollcommand = scroll_bar.set)
     list_message = Listbox(frame, height = 5, yscrollcommand = scroll_bar.set) 
+    list_delete = Listbox(frame, height = 5, yscrollcommand = scroll_bar.set) 
     for line in range(0, len(lines)):
         list_title.insert(END, lines[line][1])
         list_message.insert(END, lines[line][2])
+        list_delete.insert(END, delete_button)
+
     
 
 
     def scroll(x,y):
         list_title.yview(x,y)
         list_message.yview(x,y)
+        list_delete
 
     list_title.pack(side = LEFT)
     list_message.pack(side = LEFT)
+    list_delete.pack(side = LEFT)
     scroll_bar.config(command = scroll)
     scroll_bar.pack(side = RIGHT, fill = BOTH)
 
@@ -172,7 +180,7 @@ def today_reminders_page(page):
     #the first list contains the items that have been positioned using the 'place' method
     #the second list contains the items that have been positioned using the 'pack' method
     page = [title, frame]
-    page_pack = [list_title, list_message, scroll_bar]
+    page_pack = [list_title, list_message, scroll_bar, list_delete]
 
     #setting 'page_and_home' to the list of items and setting the string to "reminders" (as we want the button that will be created to leave this page and bring us back to the 'Reminders' page)
     #passing this into 'back_button' which creates and positions the button
