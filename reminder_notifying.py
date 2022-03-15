@@ -30,18 +30,21 @@ for element in range(0, len(lines)):
         time.sleep(10)
 
 #removing the items that needed to be removed from the list
+#check whether the file exists
 if exists("C:\\Users\\dorot\\Documents\\GitHub\\Reminder\\Today_Reminders.txt") == True:
     lines_in = read_file("Today_Reminders.txt")
+    #check whether there is any data in the file
     if lines_in != []:
+        #if there is data, check whether the date matches the date today
         if lines_in[0][0] != date:
+            #overwrite file if the dates do not match
             write_file()
     else:
+        #write to the file if it is empty
         write_file()
 else:
+    #create file if it does not exist
     write_file()
-
-
-
 
 #opening the reminders file in write mode and writing the information in the list to the file
 file = open("Reminders.txt", "w")
