@@ -147,28 +147,33 @@ def today_reminders_page(page):
 
     scroll_bar = Scrollbar(frame)
 
-    delete_button = Button(frame, text = "Delete")
-
     lines = read_file("Today_Reminders.txt")
-    list_title = Listbox(frame, height = 5, yscrollcommand = scroll_bar.set)
-    list_message = Listbox(frame, height = 5, yscrollcommand = scroll_bar.set) 
-    list_delete = Listbox(frame, height = 5, yscrollcommand = scroll_bar.set) 
+    list_title = Listbox(frame, height = 5, yscrollcommand = scroll_bar.set, bd = 0, highlightthickness = 0)
+    list_message = Listbox(frame, height = 5, yscrollcommand = scroll_bar.set, bd = 0, highlightthickness = 0)  
     for line in range(0, len(lines)):
         list_title.insert(END, lines[line][1])
         list_message.insert(END, lines[line][2])
-        list_delete.insert(END, delete_button)
 
-    
 
+    '''
+        selected_title = list_title.curselection()
+    selected_message = list_message.curselection()
+
+    print(selected_title, selected_message)
+
+    if selected_title != 0:
+        list_message.select_set(selected_title)
+    elif selected_message != 0:
+        list_title.select_set(selected_message)
+  '''      
 
     def scroll(x,y):
         list_title.yview(x,y)
         list_message.yview(x,y)
-        list_delete
 
+    
     list_title.pack(side = LEFT)
     list_message.pack(side = LEFT)
-    list_delete.pack(side = LEFT)
     scroll_bar.config(command = scroll)
     scroll_bar.pack(side = RIGHT, fill = BOTH)
 
@@ -180,7 +185,7 @@ def today_reminders_page(page):
     #the first list contains the items that have been positioned using the 'place' method
     #the second list contains the items that have been positioned using the 'pack' method
     page = [title, frame]
-    page_pack = [list_title, list_message, scroll_bar, list_delete]
+    page_pack = [list_title, list_message, scroll_bar]
 
     #setting 'page_and_home' to the list of items and setting the string to "reminders" (as we want the button that will be created to leave this page and bring us back to the 'Reminders' page)
     #passing this into 'back_button' which creates and positions the button
@@ -202,15 +207,15 @@ def all_reminders_page(page):
 
    
 
-    frame = Frame(main, bg = "green", bd = 10, width = 300, height = 200)
+    frame = Frame(main, bg = "grey", bd = 10, width = 300, height = 200)
     frame.place(relx = 0.5, rely = 0.5, anchor = CENTER)
 
     scroll_bar = Scrollbar(frame)
 
     lines = read_file("Reminders.txt")
-    list_date = Listbox(frame, height = 5, yscrollcommand = scroll_bar.set)
-    list_title = Listbox(frame, height = 5, yscrollcommand = scroll_bar.set)
-    list_message = Listbox(frame, height = 5, yscrollcommand = scroll_bar.set)
+    list_date = Listbox(frame, height = 7, yscrollcommand = scroll_bar.set, bd = 0, highlightthickness = 0)
+    list_title = Listbox(frame, height = 7, yscrollcommand = scroll_bar.set, bd = 0, highlightthickness = 0)
+    list_message = Listbox(frame, height = 7, yscrollcommand = scroll_bar.set, bd = 0, highlightthickness = 0)
     for line in range(0, len(lines)):
         list_date.insert(END, lines[line][0])
         list_title.insert(END, lines[line][1])
@@ -222,14 +227,29 @@ def all_reminders_page(page):
         list_title.yview(x,y)
         list_message.yview(x,y)
 
+
+    top = "Date                               Title                                 Message                             "
+    label = Label(frame, text = top, bg = "#EFF1F0")
+    label.pack(side = TOP, anchor = NW, fill = BOTH)
+
+
     list_date.pack(side = LEFT)
     list_title.pack(side = LEFT)
     list_message.pack(side = LEFT)
     scroll_bar.config(command = scroll)
     scroll_bar.pack(side = RIGHT, fill = BOTH)
-  
+    '''
+    selected_title = list_title.curselection()
+    selected_message = list_message.curselection()
 
+    print(selected_title, selected_message)
 
+    if selected_title != 0:
+        list_message.select_set(selected_title)
+    elif selected_message != 0:
+        list_title.select_set(selected_message)
+
+    '''
 
 
     #two lists containing all of the items on the about page

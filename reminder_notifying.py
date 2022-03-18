@@ -1,9 +1,10 @@
-#importing needed modules and file
+#importing needed modules
 import time
+from os.path import exists
+import datetime
 from reminder_subroutines import find_date
 from reminder_subroutines import read_file
 from reminder_subroutines import notify
-from os.path import exists
 
 def write_file():
     counter = 0 
@@ -31,7 +32,7 @@ for element in range(0, len(lines)):
 
 #removing the items that needed to be removed from the list
 #check whether the file exists
-if exists("C:\\Users\\dorot\\Documents\\GitHub\\Reminder\\Today_Reminders.txt") == True:
+if exists("Reminder\\Today_Reminders.txt") == True:
     lines_in = read_file("Today_Reminders.txt")
     #check whether there is any data in the file
     if lines_in != []:
