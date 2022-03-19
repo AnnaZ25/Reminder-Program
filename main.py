@@ -1,5 +1,4 @@
 #importing the needed module and file
-from lib2to3.pgen2.token import LEFTSHIFT
 from tkinter import *
 from reminder_subroutines import read_file
 
@@ -138,6 +137,29 @@ def onselect(event, other_lists):
         for j in range (0, len(other_lists)):
             other_lists[j].select_set(selected[i])
 
+def list_boxes_today(list_boxes):
+    #creating listboxes and adding data (the title and message) of each reminder in the "Today's Reminders.txt" file
+    lines = read_file("Today_Reminders.txt")
+    list_title = list_boxes[0]
+    list_message = list_boxes[1]
+    for line in range(0, len(lines)):
+        list_title.insert(END, lines[line][0])
+        list_message.insert(END, lines[line][1])
+
+def list_boxes_all(list_boxes):
+    #creating listboxes and adding data (the date, title and message) of each reminder in the "Reminders.txt" file
+    lines = read_file("Reminders.txt")
+    list_date = list_boxes[0]
+    list_title = list_boxes[1]
+    list_message = list_boxes[2]
+    for line in range(0, len(lines)):
+        list_date.insert(END, lines[line][0])
+        list_title.insert(END, lines[line][1])
+        list_message.insert(END, lines[line][2])
+        list_boxes = [list_message, list_title, list_message]
+    delete = Button(main, text = "Delete", command = lambda: delete_rows([list_boxes, "Reminders.txt"]))
+    return delete
+
 def today_reminders_page(page):
     #calling leave page to leave the home page
     #using the variable 'page_and_home' to pass in the list of home page elements
@@ -153,43 +175,46 @@ def today_reminders_page(page):
     #creating the items on the 'Today's Reminders' page
     title = Label(main, text = "Today's Reminders", font = (40))
     frame = Frame(main, bg = "grey", bd = 10)
+    delete = Button(main, text = "Delete", command = lambda: delete_rows([list_boxes, "Today_Reminders.txt"]))
     scroll_bar = Scrollbar(frame)
     scroll_bar.config(command = scroll)
     top_label = "Title                                 Message                            "
     label = Label(frame, text = top_label, bg = "#EFF1F0")
 
-    #creating listboxes and adding data (the title and message) of each reminder in the "Today's Reminders.txt" file
-    lines = read_file("Today_Reminders.txt")
+    #creating the listboxes
     #setting the selection mode to allow multiple selections; configuring other settings of the listboxes.
     list_title = Listbox(frame, height = 5, yscrollcommand = scroll_bar.set, bd = 0, highlightthickness = 0, selectmode = "multiple", exportselection = False)
     list_message = Listbox(frame, height = 5, yscrollcommand = scroll_bar.set, bd = 0, highlightthickness = 0, selectmode = "multiple", exportselection = False) 
-    for line in range(0, len(lines)):
-        list_title.insert(END, lines[line][1])
-        list_message.insert(END, lines[line][2])
+    list_boxes = [list_title, list_message]
+    list_boxes_today(list_boxes)
 
     #positioning the items on the 'Today's Reminders' page
     title.place(relx = 0.5, rely = 0.25, anchor = CENTER)
     frame.place(relx = 0.5, rely = 0.5, anchor = CENTER)
+    delete.place(relx = 0.5, rely = 0.85, anchor = CENTER)
     label.pack(side = TOP, anchor = NW, fill = BOTH)
-    list_title.pack(side = LEFT)
-    list_message.pack(side = LEFT)
+    list_boxes_pack(list_boxes)
     scroll_bar.pack(side = RIGHT, fill = BOTH)
 
     #the procedure 'onselect' is run when an item is selected (or deselected) from either list.
     list_title.bind("<<ListboxSelect>>", lambda event: onselect(event, [list_message]))
     list_message.bind("<<ListboxSelect>>", lambda event: onselect(event, [list_title]))
 
-
     #two lists containing all of the items on the about page
     #the first list contains the items that have been positioned using the 'place' method
     #the second list contains the items that have been positioned using the 'pack' method
-    page = [title, frame]
+    page = [title, frame, delete]
     page_pack = [list_title, list_message, scroll_bar]
 
     #setting 'page_and_home' to the list of items and setting the string to "reminders" (as we want the button that will be created to leave this page and bring us back to the 'Reminders' page)
     #passing this into 'back_button' which creates and positions the button
     page_and_home = [page, page_pack, "reminders"]
     back_button(page_and_home)
+
+def list_boxes_pack(list_boxes, delete):
+    for i in range (0, len(list_boxes)):
+        list_boxes[i].pack(side = LEFT)
+    delete.place(relx = 0.5, rely = 0.85, anchor = CENTER)
 
 def all_reminders_page(page):
     #calling leave page to leave the home page
@@ -212,24 +237,19 @@ def all_reminders_page(page):
     top_label = "Date                               Title                                 Message                             "
     label = Label(frame, text = top_label, bg = "#EFF1F0")
 
-    #creating listboxes and adding data (the date, title and message) of each reminder in the "Reminders.txt" file
-    lines = read_file("Reminders.txt")
+    #creating the listboxes
     #setting the selection mode to allow multiple selections; configuring other settings of the listboxes.
     list_date = Listbox(frame, height = 7, yscrollcommand = scroll_bar.set, bd = 0, highlightthickness = 0, selectmode = "multiple", exportselection = False)
     list_title = Listbox(frame, height = 7, yscrollcommand = scroll_bar.set, bd = 0, highlightthickness = 0, selectmode = "multiple", exportselection = False)
     list_message = Listbox(frame, height = 7, yscrollcommand = scroll_bar.set, bd = 0, highlightthickness = 0, selectmode = "multiple", exportselection = False)
-    for line in range(0, len(lines)):
-        list_date.insert(END, lines[line][0])
-        list_title.insert(END, lines[line][1])
-        list_message.insert(END, lines[line][2])
+    list_boxes = [list_date, list_title, list_message]
+    delete = list_boxes_all(list_boxes)
 
     #positioning the items on the 'All Reminders' page
     title.place(relx = 0.5, rely = 0.25, anchor = CENTER)
     frame.place(relx = 0.5, rely = 0.5, anchor = CENTER)
     label.pack(side = TOP, anchor = NW, fill = BOTH)
-    list_date.pack(side = LEFT)
-    list_title.pack(side = LEFT)
-    list_message.pack(side = LEFT)
+    list_boxes_pack(list_boxes, delete)
     scroll_bar.pack(side = RIGHT, fill = BOTH)
 
     #the procedure 'onselect' is run when an item is selected (or deselected) from either list.
@@ -240,7 +260,7 @@ def all_reminders_page(page):
     #two lists containing all of the items on the about page
     #the first list contains the items that have been positioned using the 'place' method
     #the second list contains the items that have been positioned using the 'pack' method
-    page = [title, frame]
+    page = [title, frame, delete]
     page_pack = [list_date, list_title, list_message, scroll_bar]
 
     #setting 'page_and_home' to the list of items and setting the string to "reminders" (as we want the button that will be created to leave this page and bring us back to the 'Reminders' page)
@@ -268,6 +288,28 @@ def about_page():
     #passing this into 'back_button' which creates and positions the button
     page_and_home = [page, "home"]
     back_button(page_and_home)
+
+def delete_rows(list_and_file):
+    selected = list_and_file[0][0].curselection()
+    lines = read_file(list_and_file[1])
+    for i in range (0, len(selected)):
+        lines.pop(i)
+
+    for i in range (0, len(list_and_file[0])):
+        list_and_file[0][i].selection_clear(0, END)
+
+    file = open(list_and_file[1], "w")
+    for i in range (0, len(lines)):
+        if list_and_file[1] == "Reminders.txt":
+            file.write(", ".join(lines[i]))
+    file.close()
+
+    if list_and_file[1] == "Reminders":
+        delete = list_boxes_all(list_and_file[0])
+        list_boxes_pack(list_and_file[0], delete)
+    else:
+        delete = list_boxes_today(list_and_file[0])
+        list_boxes_pack(list_and_file[0], delete)
 
 #initialising the window, setting some properties and creating a canvas
 main = Tk()
