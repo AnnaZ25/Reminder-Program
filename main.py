@@ -126,6 +126,16 @@ def reminders_page():
     page_and_home = [page, "home"]
     back_button(page_and_home)
 
+def onselect(event, other_lists):
+    # Note here that Tkinter passes an event object to onselect()
+    for j in range (0, len(other_lists)):
+        other_lists[j].selection_clear(0, END)
+    widget = event.widget
+    selected = widget.curselection()
+    for i in range (0, len(selected)):
+        for j in range (0, len(other_lists)):
+            other_lists[j].select_set(selected[i])
+
 def today_reminders_page(page):
     #calling leave page to leave the home page
     #using the variable 'page_and_home' to pass in the list of home page elements
@@ -141,44 +151,39 @@ def today_reminders_page(page):
     title.place(relx = 0.5, rely = 0.25, anchor = CENTER)
 
 
-
-    frame = Frame(main, bg = "green", bd = 10, width = 300, height = 200)
-    frame.place(relx = 0.4, rely = 0.5, anchor = CENTER)
-
-    scroll_bar = Scrollbar(frame)
-
-    lines = read_file("Today_Reminders.txt")
-    list_title = Listbox(frame, height = 5, yscrollcommand = scroll_bar.set, bd = 0, highlightthickness = 0)
-    list_message = Listbox(frame, height = 5, yscrollcommand = scroll_bar.set, bd = 0, highlightthickness = 0)  
-    for line in range(0, len(lines)):
-        list_title.insert(END, lines[line][1])
-        list_message.insert(END, lines[line][2])
-
-
-    '''
-        selected_title = list_title.curselection()
-    selected_message = list_message.curselection()
-
-    print(selected_title, selected_message)
-
-    if selected_title != 0:
-        list_message.select_set(selected_title)
-    elif selected_message != 0:
-        list_title.select_set(selected_message)
-  '''      
-
     def scroll(x,y):
         list_title.yview(x,y)
         list_message.yview(x,y)
 
+
+
+    frame = Frame(main, bg = "grey", bd = 10)
+    frame.place(relx = 0.5, rely = 0.5, anchor = CENTER)
+
+    scroll_bar = Scrollbar(frame)
+
+
+    lines = read_file("Today_Reminders.txt")
+    list_title = Listbox(frame, height = 5, yscrollcommand = scroll_bar.set, bd = 0, highlightthickness = 0, selectmode = "multiple", exportselection = False)
+    list_message = Listbox(frame, height = 5, yscrollcommand = scroll_bar.set, bd = 0, highlightthickness = 0, selectmode = "multiple", exportselection = False) 
+    for line in range(0, len(lines)):
+        list_title.insert(END, lines[line][1])
+        list_message.insert(END, lines[line][2])
     
+
+    top = "Title                                 Message                            "
+    label = Label(frame, text = top, bg = "#EFF1F0")
+    label.pack(side = TOP, anchor = NW, fill = BOTH)
+
+
+
     list_title.pack(side = LEFT)
     list_message.pack(side = LEFT)
     scroll_bar.config(command = scroll)
     scroll_bar.pack(side = RIGHT, fill = BOTH)
 
-
-
+    list_title.bind("<<ListboxSelect>>", lambda event: onselect(event, [list_message]))
+    list_message.bind("<<ListboxSelect>>", lambda event: onselect(event, [list_title]))
 
 
     #two lists containing all of the items on the about page
@@ -207,15 +212,15 @@ def all_reminders_page(page):
 
    
 
-    frame = Frame(main, bg = "grey", bd = 10, width = 300, height = 200)
+    frame = Frame(main, bg = "grey", bd = 10)
     frame.place(relx = 0.5, rely = 0.5, anchor = CENTER)
 
     scroll_bar = Scrollbar(frame)
 
     lines = read_file("Reminders.txt")
-    list_date = Listbox(frame, height = 7, yscrollcommand = scroll_bar.set, bd = 0, highlightthickness = 0)
-    list_title = Listbox(frame, height = 7, yscrollcommand = scroll_bar.set, bd = 0, highlightthickness = 0)
-    list_message = Listbox(frame, height = 7, yscrollcommand = scroll_bar.set, bd = 0, highlightthickness = 0)
+    list_date = Listbox(frame, height = 7, yscrollcommand = scroll_bar.set, bd = 0, highlightthickness = 0, selectmode = "multiple", exportselection = False)
+    list_title = Listbox(frame, height = 7, yscrollcommand = scroll_bar.set, bd = 0, highlightthickness = 0, selectmode = "multiple", exportselection = False)
+    list_message = Listbox(frame, height = 7, yscrollcommand = scroll_bar.set, bd = 0, highlightthickness = 0, selectmode = "multiple", exportselection = False)
     for line in range(0, len(lines)):
         list_date.insert(END, lines[line][0])
         list_title.insert(END, lines[line][1])
@@ -238,19 +243,10 @@ def all_reminders_page(page):
     list_message.pack(side = LEFT)
     scroll_bar.config(command = scroll)
     scroll_bar.pack(side = RIGHT, fill = BOTH)
-    '''
-    selected_title = list_title.curselection()
-    selected_message = list_message.curselection()
 
-    print(selected_title, selected_message)
-
-    if selected_title != 0:
-        list_message.select_set(selected_title)
-    elif selected_message != 0:
-        list_title.select_set(selected_message)
-
-    '''
-
+    list_date.bind("<<ListboxSelect>>", lambda event: onselect(event, [list_title, list_message]))
+    list_title.bind("<<ListboxSelect>>", lambda event: onselect(event, [list_date, list_message]))
+    list_message.bind("<<ListboxSelect>>", lambda event: onselect(event, [list_date, list_title]))
 
     #two lists containing all of the items on the about page
     #the first list contains the items that have been positioned using the 'place' method

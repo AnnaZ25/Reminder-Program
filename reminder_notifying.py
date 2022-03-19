@@ -1,7 +1,6 @@
 #importing needed modules
 import time
 from os.path import exists
-import datetime
 from reminder_subroutines import find_date
 from reminder_subroutines import read_file
 from reminder_subroutines import notify
