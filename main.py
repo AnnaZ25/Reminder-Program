@@ -127,11 +127,13 @@ def reminders_page():
     back_button(page_and_home)
 
 def onselect(event, other_lists):
-    # Note here that Tkinter passes an event object to onselect()
+    #clearing already selected items from the lists stored at each index of the 'other_lists' list
     for j in range (0, len(other_lists)):
         other_lists[j].selection_clear(0, END)
+    #finding the items selected in the listbox that the item was selected in
     widget = event.widget
     selected = widget.curselection()
+    #selecting all items in all listboxes that are in the same row 
     for i in range (0, len(selected)):
         for j in range (0, len(other_lists)):
             other_lists[j].select_set(selected[i])
@@ -143,45 +145,37 @@ def today_reminders_page(page):
     page_and_home = [page, "not returning"]
     leave_page(page_and_home)
 
-    #creating the items on the 'Today's Reminders' page
-    title = Label(main, text = "Today's Reminders", font = (40))
-    #scroll_bar = Scrollbar(main, orient = VERTICAL, height = 200)
-
-    #positioning the items on the 'Today's Reminders' page
-    title.place(relx = 0.5, rely = 0.25, anchor = CENTER)
-
-
+    #procedure that scrolls both of the listboxes to be created at the same time
     def scroll(x,y):
         list_title.yview(x,y)
         list_message.yview(x,y)
 
-
-
+    #creating the items on the 'Today's Reminders' page
+    title = Label(main, text = "Today's Reminders", font = (40))
     frame = Frame(main, bg = "grey", bd = 10)
-    frame.place(relx = 0.5, rely = 0.5, anchor = CENTER)
-
     scroll_bar = Scrollbar(frame)
+    scroll_bar.config(command = scroll)
+    top_label = "Title                                 Message                            "
+    label = Label(frame, text = top_label, bg = "#EFF1F0")
 
-
+    #creating listboxes and adding data (the title and message) of each reminder in the "Today's Reminders.txt" file
     lines = read_file("Today_Reminders.txt")
+    #setting the selection mode to allow multiple selections; configuring other settings of the listboxes.
     list_title = Listbox(frame, height = 5, yscrollcommand = scroll_bar.set, bd = 0, highlightthickness = 0, selectmode = "multiple", exportselection = False)
     list_message = Listbox(frame, height = 5, yscrollcommand = scroll_bar.set, bd = 0, highlightthickness = 0, selectmode = "multiple", exportselection = False) 
     for line in range(0, len(lines)):
         list_title.insert(END, lines[line][1])
         list_message.insert(END, lines[line][2])
-    
 
-    top = "Title                                 Message                            "
-    label = Label(frame, text = top, bg = "#EFF1F0")
+    #positioning the items on the 'Today's Reminders' page
+    title.place(relx = 0.5, rely = 0.25, anchor = CENTER)
+    frame.place(relx = 0.5, rely = 0.5, anchor = CENTER)
     label.pack(side = TOP, anchor = NW, fill = BOTH)
-
-
-
     list_title.pack(side = LEFT)
     list_message.pack(side = LEFT)
-    scroll_bar.config(command = scroll)
     scroll_bar.pack(side = RIGHT, fill = BOTH)
 
+    #the procedure 'onselect' is run when an item is selected (or deselected) from either list.
     list_title.bind("<<ListboxSelect>>", lambda event: onselect(event, [list_message]))
     list_message.bind("<<ListboxSelect>>", lambda event: onselect(event, [list_title]))
 
@@ -198,26 +192,29 @@ def today_reminders_page(page):
     back_button(page_and_home)
 
 def all_reminders_page(page):
-   #calling leave page to leave the home page
+    #calling leave page to leave the home page
     #using the variable 'page_and_home' to pass in the list of home page elements
     #the boolean determines whether the page we are moving to is a home page
     page_and_home = [page, False]
     leave_page(page_and_home)
 
+    #procedure that scrolls both of the listboxes to be created at the same time
+    def scroll(x,y):
+        list_date.yview(x,y)
+        list_title.yview(x,y)
+        list_message.yview(x,y)
+
     #creating the items on the 'All Reminders' page
     title = Label(main, text = "All Reminders", font = (40))
-
-    #positioning the items on the 'Today's Reminders' page
-    title.place(relx = 0.5, rely = 0.25, anchor = CENTER)
-
-   
-
     frame = Frame(main, bg = "grey", bd = 10)
-    frame.place(relx = 0.5, rely = 0.5, anchor = CENTER)
-
     scroll_bar = Scrollbar(frame)
+    scroll_bar.config(command = scroll)
+    top_label = "Date                               Title                                 Message                             "
+    label = Label(frame, text = top_label, bg = "#EFF1F0")
 
+    #creating listboxes and adding data (the date, title and message) of each reminder in the "Reminders.txt" file
     lines = read_file("Reminders.txt")
+    #setting the selection mode to allow multiple selections; configuring other settings of the listboxes.
     list_date = Listbox(frame, height = 7, yscrollcommand = scroll_bar.set, bd = 0, highlightthickness = 0, selectmode = "multiple", exportselection = False)
     list_title = Listbox(frame, height = 7, yscrollcommand = scroll_bar.set, bd = 0, highlightthickness = 0, selectmode = "multiple", exportselection = False)
     list_message = Listbox(frame, height = 7, yscrollcommand = scroll_bar.set, bd = 0, highlightthickness = 0, selectmode = "multiple", exportselection = False)
@@ -225,25 +222,17 @@ def all_reminders_page(page):
         list_date.insert(END, lines[line][0])
         list_title.insert(END, lines[line][1])
         list_message.insert(END, lines[line][2])
-    
 
-    def scroll(x,y):
-        list_date.yview(x,y)
-        list_title.yview(x,y)
-        list_message.yview(x,y)
-
-
-    top = "Date                               Title                                 Message                             "
-    label = Label(frame, text = top, bg = "#EFF1F0")
+    #positioning the items on the 'All Reminders' page
+    title.place(relx = 0.5, rely = 0.25, anchor = CENTER)
+    frame.place(relx = 0.5, rely = 0.5, anchor = CENTER)
     label.pack(side = TOP, anchor = NW, fill = BOTH)
-
-
     list_date.pack(side = LEFT)
     list_title.pack(side = LEFT)
     list_message.pack(side = LEFT)
-    scroll_bar.config(command = scroll)
     scroll_bar.pack(side = RIGHT, fill = BOTH)
 
+    #the procedure 'onselect' is run when an item is selected (or deselected) from either list.
     list_date.bind("<<ListboxSelect>>", lambda event: onselect(event, [list_title, list_message]))
     list_title.bind("<<ListboxSelect>>", lambda event: onselect(event, [list_date, list_message]))
     list_message.bind("<<ListboxSelect>>", lambda event: onselect(event, [list_date, list_title]))
