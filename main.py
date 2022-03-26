@@ -138,28 +138,25 @@ def onselect(event, other_lists):
         for j in range (0, len(other_lists)):
             other_lists[j].select_set(selected[i])
 
-def list_boxes_today(list_boxes):
-    #creating listboxes and adding data (the title and message) of each reminder in the "Today's Reminders.txt" file
-    lines = read_file("Today_Reminders.txt")
-    list_title = list_boxes[0]
-    list_message = list_boxes[1]
-    for line in range(0, len(lines)):
-        list_title.insert(END, lines[line][0])
-        list_message.insert(END, lines[line][1])
+def list_boxes_add(list_boxes, file):
+    #inserting rows of data to the listboxes created
 
-def list_boxes_all(list_boxes):
-    #creating listboxes and adding data (the date, title and message) of each reminder in the "Reminders.txt" file
-    lines = read_file("Reminders.txt")
-    list_date = list_boxes[0]
-    list_title = list_boxes[1]
-    list_message = list_boxes[2]
+    #reading the file passed into the subroutine
+    lines = read_file(file)
+
+    #inserting the data from the file into the right columns of the listboxes
     for line in range(0, len(lines)):
-        list_date.insert(END, lines[line][0])
-        list_title.insert(END, lines[line][1])
-        list_message.insert(END, lines[line][2])
-        list_boxes = [list_message, list_title, list_message]
-    delete = Button(main, text = "Delete", command = lambda: delete_rows([list_boxes, "Reminders.txt"]))
-    return delete
+        #checking whether we are adding to two or three listboxes 
+        if len(list_boxes) == 3:
+            list_boxes[0].insert(END, lines[line][0])
+            list_boxes[1].insert(END, lines[line][1])
+            list_boxes[2].insert(END, lines[line][2])
+        else:
+            list_boxes[0].insert(END, lines[line][1])
+            list_boxes[1].insert(END, lines[line][2])
+    
+    #returning the listboxes
+    return list_boxes
 
 def today_reminders_page(page):
     #calling leave page to leave the home page
@@ -176,7 +173,6 @@ def today_reminders_page(page):
     #creating the items on the 'Today's Reminders' page
     title = Label(main, text = "Today's Reminders", font = (40))
     frame = Frame(main, bg = "grey", bd = 10)
-    delete = Button(main, text = "Delete", command = lambda: delete_rows([list_boxes, "Today_Reminders.txt"]))
     scroll_bar = Scrollbar(frame)
     scroll_bar.config(command = scroll)
     top_label = "Title                                 Message                            "
@@ -187,15 +183,18 @@ def today_reminders_page(page):
     list_title = Listbox(frame, height = 5, yscrollcommand = scroll_bar.set, bd = 0, highlightthickness = 0, selectmode = "multiple", exportselection = False)
     list_message = Listbox(frame, height = 5, yscrollcommand = scroll_bar.set, bd = 0, highlightthickness = 0, selectmode = "multiple", exportselection = False) 
     list_boxes = [list_title, list_message]
-    list_boxes_today(list_boxes)
+    list_boxes = list_boxes_add(list_boxes, "Today_Reminders.txt")
+
+    #creating the delete button and linking it to the procedure delete_rows
+    delete = Button(main, text = "Delete", command = lambda: delete_rows([list_boxes, "Today_Reminders.txt"]))
 
     #positioning the items on the 'Today's Reminders' page
     title.place(relx = 0.5, rely = 0.25, anchor = CENTER)
     frame.place(relx = 0.5, rely = 0.5, anchor = CENTER)
-    delete.place(relx = 0.5, rely = 0.85, anchor = CENTER)
     label.pack(side = TOP, anchor = NW, fill = BOTH)
     list_boxes_pack(list_boxes)
     scroll_bar.pack(side = RIGHT, fill = BOTH)
+    delete.place(relx = 0.5, rely = 0.85, anchor = CENTER)
 
     #the procedure 'onselect' is run when an item is selected (or deselected) from either list.
     list_title.bind("<<ListboxSelect>>", lambda event: onselect(event, [list_message]))
@@ -212,10 +211,10 @@ def today_reminders_page(page):
     page_and_home = [page, page_pack, "reminders"]
     back_button(page_and_home)
 
-def list_boxes_pack(list_boxes, delete):
+def list_boxes_pack(list_boxes):
+    #packing all the listboxes in 'list_boxes'
     for i in range (0, len(list_boxes)):
         list_boxes[i].pack(side = LEFT)
-    delete.place(relx = 0.5, rely = 0.85, anchor = CENTER)
 
 def all_reminders_page(page):
     #calling leave page to leave the home page
@@ -244,14 +243,18 @@ def all_reminders_page(page):
     list_title = Listbox(frame, height = 7, yscrollcommand = scroll_bar.set, bd = 0, highlightthickness = 0, selectmode = "multiple", exportselection = False)
     list_message = Listbox(frame, height = 7, yscrollcommand = scroll_bar.set, bd = 0, highlightthickness = 0, selectmode = "multiple", exportselection = False)
     list_boxes = [list_date, list_title, list_message]
-    delete = list_boxes_all(list_boxes)
+    list_boxes = list_boxes_add(list_boxes, "Reminders.txt")
+    
+    #creating the delete button and linking it to the procedure delete_rows
+    delete = Button(main, text = "Delete", command = lambda: delete_rows([list_boxes, "Reminders.txt"]))
 
     #positioning the items on the 'All Reminders' page
     title.place(relx = 0.5, rely = 0.25, anchor = CENTER)
     frame.place(relx = 0.5, rely = 0.5, anchor = CENTER)
     label.pack(side = TOP, anchor = NW, fill = BOTH)
-    list_boxes_pack(list_boxes, delete)
+    list_boxes_pack(list_boxes)
     scroll_bar.pack(side = RIGHT, fill = BOTH)
+    delete.place(relx = 0.5, rely = 0.85, anchor = CENTER)
 
     #the procedure 'onselect' is run when an item is selected (or deselected) from either list.
     list_date.bind("<<ListboxSelect>>", lambda event: onselect(event, [list_title, list_message]))
@@ -307,26 +310,62 @@ def about_page():
     back_button(page_and_home)
 
 def delete_rows(list_and_file):
+    #deleting the rows from the lists and updating the 'Reminders.txt' or 'Today_Reminders.txt' file
+
+    #finding the selected item indexes
     selected = list_and_file[0][0].curselection()
-    lines = read_file(list_and_file[1])
+
+    #adding the selected items to a list called items
+    items = []
+    lists = list_and_file[0]
     for i in range (0, len(selected)):
-        lines.pop(i)
+        item_selected = selected[i]
+        #checking whether there are two or three listboxes passed into the subroutine to resolve indexing problems
+        if len(lists) == 3:
+            items.append([lists[0].get(item_selected), lists[1].get(item_selected), lists[2].get(item_selected)])
+        else:
+            items.append([lists[0].get(item_selected), lists[1].get(item_selected)])
 
-    for i in range (0, len(list_and_file[0])):
-        list_and_file[0][i].selection_clear(0, END)
+    #reading the file and storing all its lines in the list 'lines'
+    lines = read_file(list_and_file[1])
 
+    #deleting the items that should be deleted from the lists.
+    for i in range (0, len(items)):
+        for j in range (0, len(lines)):
+            #checking whether there are two or three listboxes passed into the subroutine to resolve indexing problems
+            if len(lists) == 3:
+                if (lists[0].get(j) == items[i][0]) and (lists[1].get(j) == items[i][1]) and (lists[2].get(j) == items[i][2]): 
+                    lists[0].delete(j)
+                    lists[1].delete(j)
+                    lists[2].delete(j)
+            else:
+                if (lists[0].get(j) == items[i][0]) and (lists[1].get(j) == items[i][1]): 
+                    lists[0].delete(j)
+                    lists[1].delete(j)
+
+    #adding all of the items that need removing from the text file passed into the subroutine
+    remove = []
+    for i in range (0, len(lines)):
+        for j in range (0, len(items)):
+            #checking whether there are two or three listboxes passed into the subroutine to resolve indexing problems
+            if len(lists) == 3:
+                if (lines[i][0] == items[j][0]) and (lines[i][1] == items[j][1]) and (lines[i][2] == items[j][2]):
+                    remove.append(i)
+            else:
+                if (lines[i][1] == items[j][0]) and (lines[i][2] == items[j][1]):
+                    remove.append(i)
+
+    #removing the indexes present in the list 'remove'
+    counter = 0 
+    for i in range (0, len(remove)):
+        lines.pop(remove[i]-counter)
+        counter += 1
+
+    #writing the data in 'lines' to the text file passed into the procedure
     file = open(list_and_file[1], "w")
     for i in range (0, len(lines)):
-        if list_and_file[1] == "Reminders.txt":
-            file.write(", ".join(lines[i]))
+        file.write(", ".join(lines[i]))
     file.close()
-
-    if list_and_file[1] == "Reminders":
-        delete = list_boxes_all(list_and_file[0])
-        list_boxes_pack(list_and_file[0], delete)
-    else:
-        delete = list_boxes_today(list_and_file[0])
-        list_boxes_pack(list_and_file[0], delete)
 
 #initialising the window, setting some properties and creating a canvas
 main = Tk()
