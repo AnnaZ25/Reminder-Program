@@ -1,6 +1,7 @@
 #importing the needed module and file
 from tkinter import *
 from reminder_subroutines import read_file
+from PIL import ImageTk, Image  
 
 def go_home():
     #positioning the items on the 'home page
@@ -277,16 +278,32 @@ def about_page():
 
     #creating the items on the 'About' page
     title = Label(main, text = "About", font = (40))
+    frame = Frame(main, bg = "grey", bd = 10)
+    frame_paragraphs = Frame(frame)
+
+    #creating the paragraphs to be displayed inside the frame 'frame_paragraphs'
+    about_1 = "The Reminder App is a program which allows you to create reminders for specific dates."
+    about_2 = "With the Reminder App you can set reminders for specific dates and be reminded on the day as soon as you log in! You can also look at all and delete any reminders you have set for the future that you don't need anymore."
+    about_box1 = Message(frame_paragraphs, text = about_1, width = 200)
+    about_box2 = Message(frame_paragraphs, text = about_2, width = 200)  
 
     #positioning the items on the 'About' page
     title.place(relx = 0.5, rely = 0.25, anchor = CENTER)
+    frame.place(relx = 0.5, rely = 0.55, anchor = CENTER)
+    frame_paragraphs.pack(side = RIGHT)
+    about_box1.pack(anchor = W)
+    about_box2.pack(anchor = W)
+    
+    #positioning the 'About' page image
+    Label(frame, image = img).pack(side = LEFT)
 
     #list containing all of the items on the about page
-    page = [title]
+    page = [title, frame]
+    page_pack = [frame_paragraphs, about_box1, about_box2] #pass into subroutine #########################################################################################
 
     #setting 'page_and_home' to the list of items and setting the string to "home" (as we want the button that will be created to leave this page and bring us back to the home page)
     #passing this into 'back_button' which creates and positions the button
-    page_and_home = [page, "home"]
+    page_and_home = [page, page_pack, "home"]
     back_button(page_and_home)
 
 def delete_rows(list_and_file):
@@ -329,6 +346,11 @@ home_page = [title, create_button, reminders_button, about_button]
 
 #calling go_home() to set up and position the items
 go_home()
+
+#opening and creating the 'About' page image
+img = Image.open("about_page_image.png")
+img = img.resize((115, 162))
+img = ImageTk.PhotoImage(img)
 
 #show window
 main.mainloop()
