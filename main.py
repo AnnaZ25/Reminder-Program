@@ -335,36 +335,36 @@ def delete_rows(list_and_file):
         else:
             items.append([lists[0].get(item_selected), lists[1].get(item_selected)])
 
+    #clearing the selections in the listboxes.
+    for i in range(0, len(lists)):
+        lists[i].selection_clear(0, END)
+
     #reading the file and storing all its lines in the list 'lines'
     lines = read_file(list_and_file[1])
 
-    #deleting the items that should be deleted from the lists.
+    #deleting the items that should be deleted from the lists and adding these items to the list 'remove'
+    remove = []
     for i in range (0, len(items)):
-        for j in range (0, len(lines)):
+        j = 0
+        found = False
+        while j <= len(lines) and not found:
             #checking whether there are two or three listboxes passed into the subroutine to resolve indexing problems
             if len(lists) == 3:
                 if (lists[0].get(j) == items[i][0]) and (lists[1].get(j) == items[i][1]) and (lists[2].get(j) == items[i][2]): 
                     lists[0].delete(j)
                     lists[1].delete(j)
                     lists[2].delete(j)
+                    found = True
+                    remove.append(i)
             else:
                 if (lists[0].get(j) == items[i][0]) and (lists[1].get(j) == items[i][1]): 
                     lists[0].delete(j)
                     lists[1].delete(j)
-
-    #adding all of the items that need removing from the text file passed into the subroutine
-    remove = []
-    for i in range (0, len(lines)):
-        for j in range (0, len(items)):
-            #checking whether there are two or three listboxes passed into the subroutine to resolve indexing problems
-            if len(lists) == 3:
-                if (lines[i][0] == items[j][0]) and (lines[i][1] == items[j][1]) and (lines[i][2] == items[j][2]):
+                    found = True
                     remove.append(i)
-            else:
-                if (lines[i][1] == items[j][0]) and (lines[i][2] == items[j][1]):
-                    remove.append(i)
+            j += 1
 
-    #removing the indexes present in the list 'remove'
+    #removing the indexes present in the list 'remove' from the 'Reminders.txt' file
     counter = 0 
     for i in range (0, len(remove)):
         lines.pop(remove[i]-counter)
