@@ -260,6 +260,15 @@ def all_reminders_page(page):
     list_date.bind("<<ListboxSelect>>", lambda event: onselect(event, [list_title, list_message]))
     list_title.bind("<<ListboxSelect>>", lambda event: onselect(event, [list_date, list_message]))
     list_message.bind("<<ListboxSelect>>", lambda event: onselect(event, [list_date, list_title]))
+    
+    def mousewheel(event):
+        list_date.yview("scroll", -1 * event.delta, "units")
+        list_title.yview("scroll", -1 * event.delta, "units")
+        list_message.yview("scroll", -1 * event.delta, "units")
+
+    list_date.bind("<MouseWheel>", lambda event: mousewheel(event))
+    list_title.bind("<MouseWheel>", lambda event:  mousewheel(event))
+    list_message.bind("<MouseWheel>", lambda event:  mousewheel(event))
 
     #two lists containing all of the items on the about page
     #the first list contains the items that have been positioned using the 'place' method
