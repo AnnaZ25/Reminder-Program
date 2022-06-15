@@ -31,7 +31,7 @@ for element in range(0, len(lines)):
 
 #removing the items that needed to be removed from the list
 #check whether the file exists
-if exists("Reminder\\Today_Reminders.txt") == True:
+if exists("Today_Reminders.txt") == True:
     lines_in = read_file("Today_Reminders.txt")
     #check whether there is any data in the file
     if lines_in != []:
